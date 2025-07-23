@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Career Pivot Roadmap</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals (Stone, Slate, Teal) -->
+    <!-- Application Structure Plan: A tab-based SPA. A top navigation bar allows switching between the 3 career paths. The default view shows high-level summaries. Clicking a path displays its detailed, multi-phase roadmap in a clear, tabular format with a summary chart. This structure facilitates easy comparison and progressive disclosure of dense information, which is ideal for decision-making. -->
+    <!-- Visualization & Content Choices: Report Info: Phased roadmaps with skills, times, and resources. Goal: Compare paths and explore details. Viz/Method: Main navigation via styled buttons. Path details presented in semantic HTML tables for clarity and accessibility. A Chart.js bar chart summarizes the time commitment for each phase, providing a quick visual anchor. Interaction: Clicking tabs updates the main content view and the summary chart. Justification: This approach prioritizes readability and direct comparison over complex, unnecessary visualizations. Library: Chart.js for canvas-based charts. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+        }
+        .nav-button {
+            transition: all 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #0d9488; /* teal-600 */
+            color: white;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        .table-responsive {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-900">Your Personalized Career Pivot Roadmap</h1>
+            <p class="mt-2 text-lg text-slate-600">From PEGA LSA to a Future-Proof Skill Set</p>
+        </header>
+
+        <nav class="flex flex-col sm:flex-row justify-center gap-2 md:gap-4 mb-8">
+            <button id="nav-path1" class="nav-button w-full sm:w-auto text-center py-3 px-6 bg-white rounded-lg shadow-sm font-semibold text-slate-700 hover:bg-teal-500 hover:text-white">
+                Path 1: Cloud Architect
+            </button>
+            <button id="nav-path2" class="nav-button w-full sm:w-auto text-center py-3 px-6 bg-white rounded-lg shadow-sm font-semibold text-slate-700 hover:bg-teal-500 hover:text-white">
+                Path 2: Integration & API Specialist
+            </button>
+            <button id="nav-path3" class="nav-button w-full sm:w-auto text-center py-3 px-6 bg-white rounded-lg shadow-sm font-semibold text-slate-700 hover:bg-teal-500 hover:text-white">
+                Path 3: AI-Enhanced Automation Expert
+            </button>
+        </nav>
+
+        <main id="main-content">
+            <!-- Path content will be injected here by JavaScript -->
+        </main>
+    </div>
+
+    <script>
+        const roadmapData = {
+            path1: {
+                title: "Path 1: The Cloud Architect (AWS Focus)",
+                description: "This is the most natural progression, leveraging your architectural skills. You will become an expert in designing, deploying, and managing robust, scalable, and secure applications on the world's leading cloud platform, AWS.",
+                chartData: {
+                    labels: ['Phase 1: Foundation', 'Phase 2: Application', 'Phase 3: Professional'],
+                    data: [3, 4, 5],
+                    title: "Estimated Timeline (Months)"
+                },
+                phases: [
+                    {
+                        title: "Phase 1: Foundational Knowledge (Months 1-3)",
+                        goal: "Master core AWS concepts and pass the AWS Certified Solutions Architect – Associate (SAA-C03) exam. This certification is the gold standard for validating your foundational architectural knowledge.",
+                        skills: [
+                            { name: "Cloud & AWS Fundamentals", focus: "Understand the 'why' behind cloud. Grasp the AWS global infrastructure, pricing models, and the Shared Responsibility Model.", time: "1 Week (10-15 hours)", resources: [{ text: "AWS Cloud Practitioner Essentials", url: "https://explore.skillbuilder.aws/learn/course/external/view/elearning/134/aws-cloud-practitioner-essentials" }, { text: "freeCodeCamp - AWS for Everyone", url: "https://www.youtube.com/watch?v=ulprqHHWlng" }] },
+                            { name: "Identity & Access Management (IAM)", focus: "Crucial for security. Learn about users, groups, roles, and policies. Understand the principle of least privilege.", time: "1 Week (10-15 hours)", resources: [{ text: "IAM Best Practices", url: "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html" }] },
+                            { name: "Core Compute Services", focus: "Learn the building blocks of applications on AWS. Understand when to use a virtual machine (EC2) vs. a serverless function (Lambda).", time: "2 Weeks (20-25 hours)", resources: [{ text: "AWS Skill Builder: Intro to EC2", url: "https://explore.skillbuilder.aws/learn" }, { text: "AWS Skill Builder: Lambda Foundations", url: "https://explore.skillbuilder.aws/learn" }] },
+                            { name: "Core Storage Services", focus: "Understand the difference between object storage (S3), block storage (EBS for EC2), and file storage (EFS).", time: "1.5 Weeks (15-20 hours)", resources: [{ text: "AWS Skill Builder: S3 Fundamentals", url: "https://explore.skillbuilder.aws/learn" }] },
+                            { name: "Core Networking Services", focus: "Master Virtual Private Cloud (VPC), public/private subnets, security groups, and routing.", time: "2.5 Weeks (25-30 hours)", resources: [{ text: "Adrian Cantrill - SAA-C03 Course", url: "https://learn.cantrill.io/p/aws-certified-solutions-architect-associate-saa-c03" }] },
+                            { name: "Core Database Services", focus: "Know when to use a relational database (RDS) vs. a NoSQL database (DynamoDB).", time: "2 Weeks (20-25 hours)", resources: [{ text: "AWS Skill Builder: RDS Primer", url: "https://explore.skillbuilder.aws/learn" }] },
+                            { name: "SAA-C03 Exam Preparation", focus: "Consolidate knowledge and practice for the exam format.", time: "2 Weeks (30-40 hours)", resources: [{ text: "Tutorials Dojo - Practice Exams", url: "https://tutorialsdojo.com/courses/aws-certified-solutions-architect-associate-practice-exams/" }] }
+                        ]
+                    },
+                    {
+                        title: "Phase 2: Deep Dive & Practical Application (Months 4-7)",
+                        goal: "Go beyond theory. Build real things and learn the tools that professionals use to manage cloud environments at scale.",
+                        skills: [
+                            { name: "Infrastructure as Code (IaC)", focus: "Define your infrastructure in code for repeatability and version control. Focus on Terraform as the industry standard.", time: "4 Weeks (40-50 hours)", resources: [{ text: "Official HashiCorp Learn", url: "https://developer.hashicorp.com/terraform/tutorials/aws-get-started" }] },
+                            { name: "Hands-On Project", focus: "Build a resilient, scalable, multi-tier web application using IaC. This will be your key portfolio piece.", time: "6 Weeks (60-80 hours)", resources: [{ text: "The Cloud Resume Challenge", url: "https://cloudresumechallenge.dev/docs/the-challenge/aws/" }] },
+                            { name: "Advanced Networking", focus: "Learn how to connect multiple VPCs and on-premises networks to AWS.", time: "3 Weeks (30-35 hours)", resources: [{ text: "AWS Skill Builder: Transit Gateway", url: "https://explore.skillbuilder.aws/learn" }] },
+                            { name: "Security & Governance", focus: "Learn how to secure your AWS environment at an organizational level.", time: "3 Weeks (30-35 hours)", resources: [{ text: "AWS Whitepaper: Security", url: "https://aws.amazon.com/whitepapers/?whitepapers-main.sort-by=item.additionalFields.sortDate&whitepapers-main.sort-order=desc&awsf.whitepapers-content-type=*all&awsf.whitepapers-tech-category=tech-category%23security" }] }
+                        ]
+                    },
+                    {
+                        title: "Phase 3: Professional Level & Specialization (Months 8-12)",
+                        goal: "Tackle complex architectural challenges and pass the AWS Certified Solutions Architect – Professional (SAP-C02) exam. This certification signals true expert-level skills.",
+                        skills: [
+                            { name: "Advanced Architectures", focus: "Master patterns for microservices, high availability, disaster recovery, and cost optimization.", time: "5 Weeks (50-60 hours)", resources: [{ text: "AWS Well-Architected Framework", url: "https://aws.amazon.com/architecture/well-architected/" }] },
+                            { name: "Data & Analytics Services", focus: "Understand how to build data pipelines and analytics solutions on AWS.", time: "4 Weeks (40-50 hours)", resources: [{ text: "AWS Skill Builder: Kinesis, Glue", url: "https://explore.skillbuilder.aws/learn" }] },
+                            { name: "Migration & Hybrid Cloud", focus: "Learn strategies and tools for migrating on-premises workloads to AWS.", time: "3 Weeks (30-35 hours)", resources: [{ text: "AWS Migration Acceleration Program", url: "https://aws.amazon.com/migration-acceleration-program/" }] },
+                            { name: "SAP-C02 Exam Preparation", focus: "This exam is a marathon. It tests your ability to solve complex, multi-service scenarios.", time: "4 Weeks (50-60 hours)", resources: [{ text: "Tutorials Dojo - Pro Practice Exams", url: "https://tutorialsdojo.com/courses/aws-certified-solutions-architect-professional-practice-exams/" }] }
+                        ]
+                    }
+                ]
+            },
+            path2: {
+                title: "Path 2: The Integration & API Specialist",
+                description: "This path builds directly on your process design experience. You will become the expert who connects the entire enterprise technology landscape, designing, building, and managing the APIs that are the glue of modern digital business.",
+                 chartData: {
+                    labels: ['Phase 1: Fundamentals', 'Phase 2: Build & Secure', 'Phase 3: Advanced Platforms'],
+                    data: [3, 4, 5],
+                    title: "Estimated Timeline (Months)"
+                },
+                phases: [
+                    {
+                        title: "Phase 1: API Fundamentals (Months 1-3)",
+                        goal: "Build a rock-solid foundation in how modern applications communicate. You will master the principles of REST, API design, and the tools of the trade.",
+                        skills: [
+                            { name: "API Fundamentals", focus: "Deeply understand REST principles, HTTP methods, and status codes. Contrast REST with GraphQL and SOAP.", time: "3 Weeks (30-40 hours)", resources: [{ text: "freeCodeCamp - APIs for Beginners", url: "https://www.youtube.com/watch?v=GZvSYJDk-us" }] },
+                            { name: "API Design & Documentation", focus: "Learn to design clean, predictable APIs using the OpenAPI Specification (Swagger). Master API testing with Postman.", time: "3 Weeks (30-40 hours)", resources: [{ text: "Swagger - OpenAPI Guide", url: "https://swagger.io/docs/specification/about/" }, { text: "Postman Learning Center", url: "https://learning.postman.com/docs/getting-started/30-days-of-postman/" }] },
+                            { name: "Microservices Concepts", focus: "Understand the 'why' behind microservices, including patterns like API Gateway and Service Discovery.", time: "2 Weeks (20-25 hours)", resources: [{ text: "Microservices.io - Patterns", url: "https://microservices.io/patterns/apigateway.html" }] },
+                            { name: "API Security", focus: "This is critical. Learn the flows of OAuth 2.0, how JWTs work, and the difference between authentication and authorization.", time: "3 Weeks (35-45 hours)", resources: [{ text: "OktaDev - OAuth 2.0 in Plain English", url: "https://www.youtube.com/watch?v=996OiexHze0" }, { text: "JWT.io", url: "https://jwt.io/introduction" }] }
+                        ]
+                    },
+                    {
+                        title: "Phase 2: Building & Securing APIs (Months 4-7)",
+                        goal: "Move from theory to practice. Build and deploy your own APIs and learn about advanced integration patterns and platforms.",
+                        skills: [
+                            { name: "Hands-On Project", focus: "Build a simple but secure REST API using a framework like Express.js (Node.js) or Flask (Python).", time: "4 Weeks (40-50 hours)", resources: [{ text: "Project Idea: URL Shortener API", url: "#" }] },
+                            { name: "Asynchronous Integration", focus: "Understand patterns that don't require immediate responses. Learn about message queues (SQS) and pub/sub systems (SNS).", time: "3 Weeks (30-35 hours)", resources: [{ text: "AWS Blog: SQS vs SNS", url: "https://aws.amazon.com/blogs/aws/choosing-between-messaging-services-for-serverless-applications/" }] },
+                            { name: "Integration Platforms (iPaaS)", focus: "Understand the value proposition of platforms like MuleSoft and how cloud-native tools compare.", time: "2 Weeks (20-25 hours)", resources: [{ text: "MuleSoft.U Development Fundamentals", url: "https://training.mulesoft.com/course/development-fundamentals-mule4" }] }
+                        ]
+                    },
+                     {
+                        title: "Phase 3: Advanced Integration & Platforms (Months 8-12)",
+                        goal: "Evolve into a true integration architect by mastering event-driven architectures and real-world, complex integration patterns.",
+                        skills: [
+                            { name: "Event-Driven Architecture", focus: "Go deep on asynchronous patterns. Learn the basics of Apache Kafka and AWS EventBridge.", time: "5 Weeks (50-60 hours)", resources: [{ text: "GOTO Conferences: Event-Driven Architecture", url: "https://www.youtube.com/watch?v=STKCRSUsyP0" }] },
+                            { name: "Advanced API Security", focus: "Explore topics like mTLS, fine-grained access control, and API threat protection.", time: "4 Weeks (40-50 hours)", resources: [{ text: "OWASP API Security Top 10", url: "https://owasp.org/www-project-api-security/" }] },
+                            { name: "Real-World Integration Patterns", focus: "Study architectural patterns for complex scenarios, like the Saga Pattern for distributed transactions and the Strangler Fig Pattern for modernization.", time: "3 Weeks (30-35 hours)", resources: [{ text: "Microservices.io: Saga Pattern", url: "https://microservices.io/patterns/data/saga.html" }] }
+                        ]
+                    }
+                ]
+            },
+            path3: {
+                title: "Path 3: The AI-Enhanced Automation Expert",
+                description: "This is the most forward-looking path, positioning you at the intersection of process automation and artificial intelligence. You will learn to design and architect next-generation intelligent automation solutions by integrating AI/ML services into business workflows.",
+                 chartData: {
+                    labels: ['Phase 1: AI/ML Foundations', 'Phase 2: Integration', 'Phase 3: Architecture'],
+                    data: [4, 4, 4],
+                    title: "Estimated Timeline (Months)"
+                },
+                phases: [
+                    {
+                        title: "Phase 1: AI/ML Foundations for Architects (Months 1-4)",
+                        goal: "Build a strong conceptual understanding of AI/ML. You are not becoming a data scientist; you are becoming an AI-literate architect who knows what's possible and how to frame business problems for AI solutions.",
+                        skills: [
+                            { name: "AI/ML Core Concepts", focus: "Learn the difference between ML and Deep Learning, Supervised vs. Unsupervised learning, and the overall ML lifecycle.", time: "4 Weeks (40-50 hours)", resources: [{ text: "Coursera - AI For Everyone", url: "https://www.coursera.org/learn/ai-for-everyone" }] },
+                            { name: "Foundational Python", focus: "You need basic Python to interact with data and SDKs. Focus on data manipulation with Pandas.", time: "4 Weeks (40-50 hours)", resources: [{ text: "freeCodeCamp - Python for Everybody", url: "https://www.youtube.com/watch?v=8DvywoWv6fI" }] },
+                            { name: "AWS AI Services", focus: "Learn to use AWS's pre-trained AI models for vision (Rekognition), document analysis (Textract), and language (Comprehend).", time: "4 Weeks (40-50 hours)", resources: [{ text: "AWS Skill Builder: Textract, Rekognition", url: "https://explore.skillbuilder.aws/learn" }] }
+                        ]
+                    },
+                    {
+                        title: "Phase 2: Consuming & Integrating AI Services (Months 5-8)",
+                        goal: "Get hands-on with the most exciting area of AI. Learn how to leverage Large Language Models (LLMs) and build practical, intelligent pipelines.",
+                        skills: [
+                            { name: "Generative AI & Prompt Engineering", focus: "Learn how LLMs work and how to write effective prompts to solve business tasks. Master AWS Bedrock.", time: "3 Weeks (35-45 hours)", resources: [{ text: "DeepLearning.AI - Prompt Engineering", url: "https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/" }] },
+                            { name: "Hands-On Project", focus: "Build an 'Intelligent Document Processing' pipeline that combines multiple AI services to automate a real-world task.", time: "5 Weeks (50-60 hours)", resources: [{ text: "Project Idea: Intelligent Invoice Processing", url: "#" }] },
+                            { name: "Amazon SageMaker for Architects", focus: "Understand the components of SageMaker (AWS's core ML platform) from an architect's view: notebooks, training jobs, endpoints.", time: "3 Weeks (30-35 hours)", resources: [{ text: "AWS Skill Builder: Intro to SageMaker", url: "https://explore.skillbuilder.aws/learn" }] }
+                        ]
+                    },
+                    {
+                        title: "Phase 3: Architecting AI/ML Solutions (Months 9-12)",
+                        goal: "Graduate to designing full-scale AI/ML solutions. Learn about MLOps, responsible AI, and how to integrate these capabilities back into the BPM/DPA systems you already know.",
+                        skills: [
+                            { name: "MLOps & Responsible AI", focus: "Learn the principles of deploying models (MLOps) and the critical concepts of fairness, bias, and explainability.", time: "3 Weeks (30-35 hours)", resources: [{ text: "AWS Documentation: SageMaker Clarify", url: "https://aws.amazon.com/sagemaker/clarify/" }] },
+                            { name: "Real-World Architecture Patterns", focus: "Study how to architect solutions that integrate AI decision-making into larger business processes, combining your PEGA expertise with your new AI skills.", time: "5 Weeks (50-60 hours)", resources: [{ text: "AWS Whitepaper: ML Best Practices", url: "https://d1.awsstatic.com/whitepapers/machine-learning-best-practices-for-public-sector.pdf" }] },
+                            { name: "MLS-C01 Exam Preparation", focus: "Prepare for the AWS ML Specialty exam, which validates your expertise in the AWS AI/ML stack.", time: "4 Weeks (50-60 hours)", resources: [{ text: "Tutorials Dojo - MLS-C01 Practice Exams", url: "https://tutorialsdojo.com/courses/aws-certified-machine-learning-specialty-practice-exams/" }] }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let currentChart = null;
+
+        function createChart(canvasId, chartData) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            if (currentChart) {
+                currentChart.destroy();
+            }
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [{
+                        label: chartData.title,
+                        data: chartData.data,
+                        backgroundColor: ['#5eead4', '#2dd4bf', '#0d9488'],
+                        borderColor: ['#0f766e'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: chartData.title,
+                            font: {
+                                size: 16
+                            },
+                            color: '#334155'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                             grid: {
+                                color: '#e2e8f0'
+                            }
+                        },
+                        x: {
+                             grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderPath(pathId) {
+            const path = roadmapData[pathId];
+            const mainContent = document.getElementById('main-content');
+
+            let phasesHtml = '';
+            path.phases.forEach(phase => {
+                let skillsHtml = '';
+                phase.skills.forEach(skill => {
+                    let resourcesHtml = skill.resources.map(res =>
+                        `<a href="${res.url}" target="_blank" rel="noopener noreferrer" class="text-teal-600 hover:text-teal-800 hover:underline">${res.text}</a>`
+                    ).join('<br>');
+
+                    skillsHtml += `
+                        <tr class="border-b border-slate-200 hover:bg-slate-100">
+                            <td class="p-4 font-semibold text-slate-800">${skill.name}</td>
+                            <td class="p-4 text-slate-600">${skill.focus}</td>
+                            <td class="p-4 text-slate-600 whitespace-nowrap">${skill.time}</td>
+                            <td class="p-4 text-sm">${resourcesHtml}</td>
+                        </tr>
+                    `;
+                });
+
+                phasesHtml += `
+                    <div class="mb-12">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-2">${phase.title}</h3>
+                        <p class="text-slate-600 mb-6">${phase.goal}</p>
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            <div class="table-responsive">
+                                <table class="w-full text-left">
+                                    <thead class="bg-slate-50 border-b-2 border-slate-200">
+                                        <tr>
+                                            <th class="p-4 text-sm font-semibold text-slate-600 uppercase tracking-wider">Skill / Topic</th>
+                                            <th class="p-4 text-sm font-semibold text-slate-600 uppercase tracking-wider">Focus Area</th>
+                                            <th class="p-4 text-sm font-semibold text-slate-600 uppercase tracking-wider">Time Allocation</th>
+                                            <th class="p-4 text-sm font-semibold text-slate-600 uppercase tracking-wider">Learning Resources</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${skillsHtml}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            mainContent.innerHTML = `
+                <div id="${pathId}-content" class="path-content bg-white rounded-xl shadow-lg p-6 md:p-8">
+                    <h2 class="text-3xl font-bold text-center text-teal-700 mb-2">${path.title}</h2>
+                    <p class="text-center text-slate-600 max-w-3xl mx-auto mb-8">${path.description}</p>
+                    <div class="chart-container mb-12">
+                        <canvas id="${pathId}-chart"></canvas>
+                    </div>
+                    ${phasesHtml}
+                </div>
+            `;
+            
+            createChart(`${pathId}-chart`, path.chartData);
+
+            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`nav-${pathId}`).classList.add('active');
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const navButtons = document.querySelectorAll('.nav-button');
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const pathId = button.id.replace('nav-', '');
+                    renderPath(pathId);
+                });
+            });
+
+            renderPath('path1');
+        });
+
+    </script>
+</body>
+</html>
